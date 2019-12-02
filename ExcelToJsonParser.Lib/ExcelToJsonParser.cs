@@ -62,30 +62,35 @@ namespace Rochas.ExcelToJson.Lib
             }
         }
 
-        public static IEnumerable<object> GetJsonObject(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
+        public static IEnumerable<object> GetJsonObject(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null, bool onlySampleRow = false)
         {
-            var strJson = GetJsonString(fileName, replaceFrom, replaceTo, headerColumns);
+            var strJson = GetJsonString(fileName, replaceFrom, replaceTo, headerColumns, onlySampleRow);
 
             return JsonConvert.DeserializeObject<IEnumerable<object>>(strJson);
         }
 
         public static string GetJsonClass(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
         {
-            var strJson = GetJsonString(fileName, replaceFrom, replaceTo, headerColumns, true);
-
-            var schema = NJsonSchema.JsonSchema.FromSampleJson(strJson);
-
-            var genOptions = new CSharpGeneratorSettings()
+            string result = null;
+            var jsonContent = GetJsonString(fileName, replaceFrom, replaceTo, headerColumns, true);
+            if (!string.IsNullOrWhiteSpace(jsonContent))
             {
-                GenerateDataAnnotations = false,
-                GenerateDefaultValues = false,
-                GenerateJsonMethods = true
-            };
-            var generator = new CSharpGenerator(schema, genOptions);
+                var schema = NJsonSchema.JsonSchema.FromSampleJson(jsonContent);
 
-            var className = fileName.Replace(".xlsx", string.Empty).Replace(".xls", string.Empty);
+                var genOptions = new CSharpGeneratorSettings()
+                {
+                    GenerateDataAnnotations = false,
+                    GenerateDefaultValues = false,
+                    GenerateJsonMethods = true
+                };
+                var generator = new CSharpGenerator(schema, genOptions);
 
-            return generator.GenerateFile(className);
+                var className = fileName.Replace(".xlsx", string.Empty).Replace(".xls", string.Empty);
+
+                result = generator.GenerateFile(className);
+            }
+
+            return result;
         }
 
         public static DataSet GetDataTable(string fileName)
