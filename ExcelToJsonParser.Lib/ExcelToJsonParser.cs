@@ -1,10 +1,11 @@
-﻿using ExcelDataReader;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Text;
+using Newtonsoft.Json;
+using ExcelDataReader;
+using NJsonSchema.CodeGeneration.CSharp;
 
 namespace Rochas.ExcelToJson.Lib
 {
@@ -12,8 +13,9 @@ namespace Rochas.ExcelToJson.Lib
     {
         #region Public Methods
 
-        public static string GetJsonString(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
+        public static string GetJsonString(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null, bool onlySampleRow = false)
         {
+            var counter = 0;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             using (var inputFile = File.Open(fileName, FileMode.Open, FileAccess.Read))
@@ -44,8 +46,11 @@ namespace Rochas.ExcelToJson.Lib
 
                         do
                         {
-                            while (reader.Read())
+                            while (reader.Read() && (onlySampleRow && counter < 1))
+                            {
                                 WriteItemJsonBody(reader, writer, headerColumns);
+                                counter += 1;
+                            }
 
                         } while (reader.NextResult());
 
@@ -57,11 +62,30 @@ namespace Rochas.ExcelToJson.Lib
             }
         }
 
-        public static IEnumerable<object> GetJsonObject(string fileName)
+        public static IEnumerable<object> GetJsonObject(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
         {
-            var strJson = GetJsonString(fileName);
+            var strJson = GetJsonString(fileName, replaceFrom, replaceTo, headerColumns);
 
             return JsonConvert.DeserializeObject<IEnumerable<object>>(strJson);
+        }
+
+        public static string GetJsonClass(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
+        {
+            var strJson = GetJsonString(fileName, replaceFrom, replaceTo, headerColumns, true);
+
+            var schema = NJsonSchema.JsonSchema.FromSampleJson(strJson);
+
+            var genOptions = new CSharpGeneratorSettings()
+            {
+                GenerateDataAnnotations = false,
+                GenerateDefaultValues = false,
+                GenerateJsonMethods = true
+            };
+            var generator = new CSharpGenerator(schema, genOptions);
+
+            var className = fileName.Replace(".xlsx", string.Empty).Replace(".xls", string.Empty);
+
+            return generator.GenerateFile(className);
         }
 
         public static DataSet GetDataTable(string fileName)
