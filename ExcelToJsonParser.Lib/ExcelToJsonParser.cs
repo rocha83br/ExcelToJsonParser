@@ -115,21 +115,18 @@ namespace Rochas.ExcelToJson.Lib
 
         private static void WriteItemJsonBody(IExcelDataReader reader, JsonWriter writer, string[] headerColumns)
         {
-            while (reader.Read())
+            writer.WriteStartObject();
+
+            var colCount = 0;
+            foreach (var col in headerColumns)
             {
-                writer.WriteStartObject();
-
-                var colCount = 0;
-                foreach (var col in headerColumns)
-                {
-                    var colValue = reader.GetValue(colCount);
-                    writer.WritePropertyName(col);
-                    writer.WriteValue(colValue);
-                    colCount += 1;
-                }
-
-                writer.WriteEndObject();
+                var colValue = reader.GetValue(colCount);
+                writer.WritePropertyName(col);
+                writer.WriteValue(colValue);
+                colCount += 1;
             }
+
+            writer.WriteEndObject();
         }
 
         #endregion
