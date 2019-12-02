@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ExcelToJsonParser/v15
+/ExcelToJsonParser/bin/Debug/netcoreapp2.1
+/ExcelToJsonParser/obj
+/ExcelToJsonParser.Lib/bin/Debug/netcoreapp2.1
+/ExcelToJsonParser.Lib/obj
