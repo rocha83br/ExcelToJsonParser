@@ -7,3 +7,6 @@
 /ExcelToJsonParser/obj
 /ExcelToJsonParser.Lib/bin/Debug/netcoreapp2.1
 /ExcelToJsonParser.Lib/obj
+/.vs/ExcelToJsonParser/DesignTimeBuild
+/ExcelToJsonParser.Console/bin/Debug/netcoreapp2.1
+/ExcelToJsonParser.Console/obj

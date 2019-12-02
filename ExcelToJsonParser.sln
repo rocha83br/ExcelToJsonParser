@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelToJsonParser.Console", "ExcelToJsonParser\ExcelToJsonParser.Console.csproj", "{4324DF31-77AC-454B-9B2A-7073C1042C63}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelToJsonParser.Console", "ExcelToJsonParser.Console\ExcelToJsonParser.Console.csproj", "{4324DF31-77AC-454B-9B2A-7073C1042C63}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelToJsonParser.Lib", "ExcelToJsonParser.Lib\ExcelToJsonParser.Lib.csproj", "{6159F509-CAC8-45B0-940B-E257AAB30ABD}"
 EndProject
