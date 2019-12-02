@@ -69,7 +69,7 @@ namespace Rochas.ExcelToJson.Lib
             return JsonConvert.DeserializeObject<IEnumerable<object>>(strJson);
         }
 
-        public static string GetJsonClass(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
+        public static string GetJsonClassModel(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
         {
             string result = null;
             var jsonContent = GetJsonString(fileName, replaceFrom, replaceTo, headerColumns, true);
