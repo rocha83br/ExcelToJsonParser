@@ -13,6 +13,8 @@
     <PackageTags>excel xlsx xls json c# class object</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>A simple excel-to-json document converter</Description>
+    <PackageIconUrl>https://raw.githubusercontent.com/rocha83br/ExcelToJsonParser/master/json-file.png</PackageIconUrl>
   </PropertyGroup>
 
   <ItemGroup>
