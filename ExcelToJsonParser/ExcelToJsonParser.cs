@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using ExcelDataReader;
 using NJsonSchema.CodeGeneration.CSharp;
 
-namespace Rochas.ExcelToJson.Lib
+namespace Rochas.ExcelToJson
 {
     public static class ExcelToJsonParser
     {
@@ -46,7 +46,7 @@ namespace Rochas.ExcelToJson.Lib
 
                         do
                         {
-                            while (reader.Read() && (onlySampleRow && counter < 1))
+                            while (reader.Read() && (!onlySampleRow || (onlySampleRow && counter < 1)))
                             {
                                 WriteItemJsonBody(reader, writer, headerColumns);
                                 counter += 1;

@@ -10,3 +10,4 @@
 /.vs/ExcelToJsonParser/DesignTimeBuild
 /ExcelToJsonParser.Console/bin/Debug/netcoreapp2.1
 /ExcelToJsonParser.Console/obj
+/ExcelToJsonParser/bin/Debug/netstandard2.0

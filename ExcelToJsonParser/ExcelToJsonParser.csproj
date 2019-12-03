@@ -1,8 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <AssemblyName>Rochas.ExcelToJsonParser.Lib</AssemblyName>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>Rochas.ExcelToJson</RootNamespace>
+    <Authors>Renato Rocha</Authors>
+    <Company />
+    <Product />
   </PropertyGroup>
 
   <ItemGroup>
