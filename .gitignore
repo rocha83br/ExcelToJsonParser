@@ -11,3 +11,5 @@
 /ExcelToJsonParser.Console/bin/Debug/netcoreapp2.1
 /ExcelToJsonParser.Console/obj
 /ExcelToJsonParser/bin/Debug/netstandard2.0
+/ExcelToJsonParser/bin
+/ExcelToJsonParser.Console/bin/Release/netcoreapp2.1

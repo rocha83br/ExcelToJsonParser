@@ -6,6 +6,11 @@
     <Authors>Renato Rocha</Authors>
     <Company />
     <Product />
+    <PackageProjectUrl>https://github.com/rocha83br/ExcelToJsonParser</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/rocha83br/ExcelToJsonParser/blob/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>Git</RepositoryType>
+    <RepositoryUrl>https://github.com/rocha83br/ExcelToJsonParser</RepositoryUrl>
+    <PackageTags>excel xlsx xls json c# class object</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
