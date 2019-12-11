@@ -16,7 +16,7 @@
     <Description>A simple excel-to-json document converter</Description>
     <PackageIconUrl>https://raw.githubusercontent.com/rocha83br/ExcelToJsonParser/master/json-file.png</PackageIconUrl>
     <Version>1.0.2</Version>
-    <PackageId>Rochas.ExcelToJsonParser</PackageId>
+    <PackageId>ExcelToJsonParser</PackageId>
     <AssemblyName>Rochas.ExcelToJsonParser</AssemblyName>
   </PropertyGroup>
 
