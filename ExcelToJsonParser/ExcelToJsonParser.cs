@@ -144,7 +144,7 @@ namespace Rochas.ExcelToJson
 
                 Workbook workbook = new Workbook();
                 workbook.LoadFromFile(fileName);
-                workbook.SaveToStream(result);
+                workbook.SaveToStream(result, FileFormat.Version2010);
 
                 return result;
             }
