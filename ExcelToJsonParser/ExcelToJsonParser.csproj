@@ -5,7 +5,7 @@
     <RootNamespace>Rochas.ExcelToJson</RootNamespace>
     <Authors>Renato Rocha</Authors>
     <Company />
-    <Product />
+    <Product>Rochas.ExcelToJsonParser</Product>
     <PackageProjectUrl>https://github.com/rocha83br/ExcelToJsonParser</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/rocha83br/ExcelToJsonParser/master/LICENSE</PackageLicenseUrl>
     <RepositoryType>Git</RepositoryType>
@@ -15,11 +15,15 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>A simple excel-to-json document converter</Description>
     <PackageIconUrl>https://raw.githubusercontent.com/rocha83br/ExcelToJsonParser/master/json-file.png</PackageIconUrl>
+    <Version>1.0.2</Version>
+    <PackageId>Rochas.ExcelToJsonParser</PackageId>
+    <AssemblyName>Rochas.ExcelToJsonParser</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="ExcelDataReader" Version="3.6.0" />
     <PackageReference Include="ExcelDataReader.DataSet" Version="3.6.0" />
+    <PackageReference Include="FreeSpire.XLS" Version="9.10.11" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NJsonSchema" Version="10.0.28" />
     <PackageReference Include="NJsonSchema.CodeGeneration" Version="10.0.28" />

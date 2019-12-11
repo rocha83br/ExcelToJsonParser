@@ -6,6 +6,7 @@ using System.Text;
 using Newtonsoft.Json;
 using ExcelDataReader;
 using NJsonSchema.CodeGeneration.CSharp;
+using Spire.Xls;
 
 namespace Rochas.ExcelToJson
 {
@@ -13,66 +14,74 @@ namespace Rochas.ExcelToJson
     {
         #region Public Methods
 
-        public static string GetJsonString(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null, bool onlySampleRow = false)
+        public static string GetJsonString(string fileName, int skipRows = 0, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null, bool onlySampleRow = false)
         {
             var counter = 0;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            using (var inputFile = File.Open(fileName, FileMode.Open, FileAccess.Read))
-            using (var result = new StringWriter())
+            using (var fileStream = GetFileStream(fileName))
             {
-                var readerConfig = new ExcelReaderConfiguration()
+                using (var result = new StringWriter())
                 {
-                    FallbackEncoding = Encoding.GetEncoding(1252)
-                };
-                using (var reader = ExcelReaderFactory.CreateReader(inputFile, readerConfig))
-                {
-                    using (var writer = new JsonTextWriter(result))
+                    var readerConfig = new ExcelReaderConfiguration()
                     {
-                        writer.Formatting = Formatting.Indented;
-                        writer.WriteStartArray();
-
-                        reader.Read();
-
-                        if (headerColumns == null)
-                            headerColumns = GetHeaderColumns(reader);
-                        else
+                        FallbackEncoding = Encoding.GetEncoding(1252)
+                    };
+                    using (var reader = ExcelReaderFactory.CreateReader(fileStream, readerConfig))
+                    {
+                        using (var writer = new JsonTextWriter(result))
                         {
-                            if (headerColumns.Length < reader.FieldCount)
-                                throw new Exception("Invalid column amount");
-                        }
+                            writer.Formatting = Formatting.Indented;
+                            writer.WriteStartArray();
 
-                        ApplyColumnNamesReplace(headerColumns, replaceFrom, replaceTo);
-
-                        do
-                        {
-                            while (reader.Read() && (!onlySampleRow || (onlySampleRow && counter < 1)))
+                            while (skipRows > 0)
                             {
-                                WriteItemJsonBody(reader, writer, headerColumns);
-                                counter += 1;
+                                reader.Read();
+                                skipRows--;
                             }
 
-                        } while (reader.NextResult());
+                            reader.Read();
 
-                        writer.WriteEndArray();
+                            if (headerColumns == null)
+                                headerColumns = GetHeaderColumns(reader);
+                            else
+                            {
+                                if (headerColumns.Length < reader.FieldCount)
+                                    throw new Exception("Invalid column amount");
+                            }
+
+                            ApplyColumnNamesReplace(headerColumns, replaceFrom, replaceTo);
+
+                            do
+                            {
+                                while (reader.Read() && (!onlySampleRow || (onlySampleRow && counter < 1)))
+                                {
+                                    WriteItemJsonBody(reader, writer, headerColumns);
+                                    counter += 1;
+                                }
+
+                            } while (reader.NextResult());
+
+                            writer.WriteEndArray();
+                        }
                     }
-                }
 
-                return result.ToString();
+                    return result.ToString();
+                }
             }
         }
 
-        public static IEnumerable<object> GetJsonObject(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null, bool onlySampleRow = false)
+        public static IEnumerable<object> GetJsonObject(string fileName, int skipRows = 0, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null, bool onlySampleRow = false)
         {
-            var strJson = GetJsonString(fileName, replaceFrom, replaceTo, headerColumns, onlySampleRow);
+            var strJson = GetJsonString(fileName, skipRows, replaceFrom, replaceTo, headerColumns, onlySampleRow);
 
             return JsonConvert.DeserializeObject<IEnumerable<object>>(strJson);
         }
 
-        public static string GetJsonClassModel(string fileName, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
+        public static string GetJsonClassModel(string fileName, int skipRows = 0, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
         {
             string result = null;
-            var jsonContent = GetJsonString(fileName, replaceFrom, replaceTo, headerColumns, true);
+            var jsonContent = GetJsonString(fileName, skipRows, replaceFrom, replaceTo, headerColumns, true);
             if (!string.IsNullOrWhiteSpace(jsonContent))
             {
                 var schema = NJsonSchema.JsonSchema.FromSampleJson(jsonContent);
@@ -93,29 +102,53 @@ namespace Rochas.ExcelToJson
             return result;
         }
 
-        public static DataSet GetDataTable(string fileName)
+        public static DataTable GetDataTable(string fileName, int skipRows = 0, bool useHeader = true)
         {
-            using (var stream = File.Open(fileName, FileMode.Open, FileAccess.Read))
+            using (var fileStream = GetFileStream(fileName))
             {
-                IExcelDataReader reader;
-
-                reader = ExcelReaderFactory.CreateReader(stream);
+                var reader = ExcelReaderFactory.CreateReader(fileStream);
 
                 var config = new ExcelDataSetConfiguration()
                 {
                     ConfigureDataTable = _ => new ExcelDataTableConfiguration
                     {
-                        UseHeaderRow = true
+                        UseHeaderRow = useHeader
                     }
                 };
-                return reader.AsDataSet(config);
-            }
+                
+                while (skipRows > 0)
+                {
+                    reader.Read();
+                    skipRows--;
+                }
 
+                return reader.AsDataSet(config).Tables[0];
+            }
         }
 
         #endregion
 
         #region Helper Methods
+
+        private static Stream GetFileStream(string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+                throw new Exception("File name not informed");
+
+            var isBinaryFile = Path.GetExtension(fileName).ToLower().Equals(".xlsb");
+            if (!isBinaryFile)
+                return File.Open(fileName, FileMode.Open, FileAccess.Read);
+            else
+            {
+                var result = new MemoryStream();
+
+                Workbook workbook = new Workbook();
+                workbook.LoadFromFile(fileName);
+                workbook.SaveToStream(result);
+
+                return result;
+            }
+        }
 
         private static string[] GetHeaderColumns(IExcelDataReader reader)
         {
