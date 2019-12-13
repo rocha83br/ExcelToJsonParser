@@ -152,10 +152,15 @@ namespace Rochas.ExcelToJson
 
         private static string[] GetHeaderColumns(IExcelDataReader reader)
         {
-            var result = new string[reader.FieldCount];
+            string[] result = null;
 
-            for (var count = 0; count < reader.FieldCount; count++)
-                result[count] = reader[count].ToString().Trim();
+            if (reader != null)
+            {
+                result = new string[reader.FieldCount];
+
+                for (var count = 0; count < reader.FieldCount; count++)
+                    result[count] = reader[count]?.ToString().Trim();
+            }
 
             return result;
         }
