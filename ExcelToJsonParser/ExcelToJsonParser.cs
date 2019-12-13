@@ -155,7 +155,7 @@ namespace Rochas.ExcelToJson
             var result = new string[reader.FieldCount];
 
             for (var count = 0; count < reader.FieldCount; count++)
-                result[count] = reader[count].ToString();
+                result[count] = reader[count].ToString().Trim();
 
             return result;
         }
