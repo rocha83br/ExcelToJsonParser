@@ -340,7 +340,9 @@ namespace Rochas.ExcelToJson
                         foreach (var field in fields)
                         {
                             writer.WritePropertyName(field.Key);
-                            writer.WriteValue(field.Value);
+
+                            if (field.Value != null)
+                                writer.WriteValue(field.Value);
                         }
 
                         writer.WriteEndObject();
