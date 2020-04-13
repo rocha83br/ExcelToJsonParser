@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.28307.779
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelToJsonParser.Console", "ExcelToJsonParser.Console\ExcelToJsonParser.Console.csproj", "{4324DF31-77AC-454B-9B2A-7073C1042C63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelToJsonParser", "ExcelToJsonParser\ExcelToJsonParser.csproj", "{053181E5-08A4-4DA9-A550-9CB0F5367ECC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExcelToJsonParser", "ExcelToJsonParser\ExcelToJsonParser.csproj", "{053181E5-08A4-4DA9-A550-9CB0F5367ECC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelToJsonParser.Legacy", "ExcelToJsonParser.Legacy\ExcelToJsonParser.Legacy.csproj", "{ADFC1804-859B-4240-B6A2-6EE201CE61DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{053181E5-08A4-4DA9-A550-9CB0F5367ECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{053181E5-08A4-4DA9-A550-9CB0F5367ECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{053181E5-08A4-4DA9-A550-9CB0F5367ECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADFC1804-859B-4240-B6A2-6EE201CE61DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADFC1804-859B-4240-B6A2-6EE201CE61DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADFC1804-859B-4240-B6A2-6EE201CE61DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADFC1804-859B-4240-B6A2-6EE201CE61DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
