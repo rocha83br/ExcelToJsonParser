@@ -15,3 +15,7 @@
 /ExcelToJsonParser.Console/bin/Release/netcoreapp2.1
 /.vs/Rochas.ExcelToJsonParser/v15
 /.vs/Rochas.ExcelToJsonParser/DesignTimeBuild
+/.vs/Rochas.ExcelToJsonParser/v14
+/ExcelToJsonParser.Legacy/bin/Debug
+/ExcelToJsonParser.Legacy/obj/Debug
+/packages

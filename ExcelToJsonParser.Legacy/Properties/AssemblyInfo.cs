@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ExcelToJsonParser.Legacy")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("A simple excel-to-json document converter (using legacy .NET Framework)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Renato Rocha")]
 [assembly: AssemblyProduct("ExcelToJsonParser.Legacy")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]

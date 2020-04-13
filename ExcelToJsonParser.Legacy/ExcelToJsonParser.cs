@@ -10,7 +10,7 @@ using ClosedXML.Excel; // Used to access named cells
 using Spire.Xls; // Used only to open excel binary files
 using NJsonSchema.CodeGeneration.CSharp; // Used to generate C# class model code
 
-namespace Rochas.ExcelToJson
+namespace Rochas.ExcelToJson.Legacy
 {
     public static class ExcelToJsonParser
     {
@@ -27,8 +27,6 @@ namespace Rochas.ExcelToJson
         public static string GetJsonStringFromTabular(Stream fileContent, int skipRows = 0, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null, bool onlySampleRow = false)
         {
             var counter = 0;
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
 
             using (var result = new StringWriter())
             {
