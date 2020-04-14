@@ -84,7 +84,7 @@ namespace Rochas.ExcelToJson.Legacy
             return JsonConvert.DeserializeObject<IEnumerable<object>>(strJson);
         }
 
-        public static string GetJsonClassModel(string fileName, int skipRows = 0, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
+        public static string GetClassModelFromTabular(string fileName, int skipRows = 0, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
         {
             string result = null;
             var jsonContent = GetJsonStringFromTabular(fileName, skipRows, replaceFrom, replaceTo, headerColumns, true);
