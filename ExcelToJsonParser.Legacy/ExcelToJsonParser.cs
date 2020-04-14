@@ -171,7 +171,7 @@ namespace Rochas.ExcelToJson.Legacy
             }
         }
 
-        public static string GetJsonStringFromForm(Stream fileContent, string sheetName, string[] fieldNames, string[] replaceFrom = null, string[] replaceTo = null)
+        public static string GetJsonStringFromForm(Stream fileContent, string sheetName, string[] replaceFrom = null, string[] replaceTo = null, string[] fieldNames = null)
         {
             if (fileContent == null)
                 throw new Exception("File content not informed");
@@ -195,6 +195,30 @@ namespace Rochas.ExcelToJson.Legacy
             var strJson = GetJsonStringFromForm(fileContent, sheetName, replaceTo, fieldNames);
 
             return JsonConvert.DeserializeObject(strJson);
+        }
+
+        public static string GetClassModelFromForm(string fileName, string sheetName, string[] replaceFrom = null, string[] replaceTo = null, string[] fieldNames = null)
+        {
+            string result = null;
+            var jsonContent = GetJsonStringFromForm(fileName, sheetName, replaceFrom, replaceTo, fieldNames);
+            if (!string.IsNullOrWhiteSpace(jsonContent))
+            {
+                var schema = NJsonSchema.JsonSchema.FromSampleJson(jsonContent);
+
+                var genOptions = new CSharpGeneratorSettings()
+                {
+                    GenerateDataAnnotations = false,
+                    GenerateDefaultValues = false,
+                    GenerateJsonMethods = true
+                };
+                var generator = new CSharpGenerator(schema, genOptions);
+
+                var className = fileName.Replace(".xlsx", string.Empty).Replace(".xls", string.Empty);
+
+                result = generator.GenerateFile(className);
+            }
+
+            return result;
         }
 
         #region Dictionary results support
@@ -316,8 +340,19 @@ namespace Rochas.ExcelToJson.Legacy
             {
                 var cell = engine.Cell(field);
 
-                if (cell.Worksheet.Name.ToLower().Equals(sheetName.ToLower()))
-                    result.Add(field, cell.Value);
+                if (cell != null)
+                    if (cell.Worksheet.Name.ToLower().Equals(sheetName.ToLower()))
+                    {
+                        try
+                        {
+                            result.Add(field, cell.Value);
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex.GetType() == typeof(InvalidOperationException))
+                                throw new InvalidOperationException($"Invalid cell value at {field}.");
+                        }
+                    }
             }
 
             return result;

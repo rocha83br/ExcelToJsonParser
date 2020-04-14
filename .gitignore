@@ -19,3 +19,5 @@
 /ExcelToJsonParser.Legacy/bin/Debug
 /ExcelToJsonParser.Legacy/obj/Debug
 /packages
+/ExcelToJsonParser.Legacy/bin/Release
+/ExcelToJsonParser.Legacy/obj/Release
