@@ -223,7 +223,7 @@ namespace Rochas.ExcelToJson.Legacy
 
         #region Dictionary results support
 
-        public static IDictionary<string, object> GetDictionary(string fileName, string sheetName, string[] fieldNames, string[] replaceFrom = null, string[] replaceTo = null)
+        public static IDictionary<string, object> GetDictionary(string fileName, string sheetName, string[] replaceFrom = null, string[] replaceTo = null, string[] fieldNames = null)
         {
             if (string.IsNullOrWhiteSpace(fileName))
                 throw new Exception("File name not informed");
@@ -234,7 +234,7 @@ namespace Rochas.ExcelToJson.Legacy
             }
         }
 
-        public static IDictionary<string, object> GetDictionary(Stream fileContent, string sheetName, string[] fieldNames, string[] replaceFrom = null, string[] replaceTo = null)
+        public static IDictionary<string, object> GetDictionary(Stream fileContent, string sheetName, string[] replaceFrom = null, string[] replaceTo = null, string[] fieldNames = null)
         {
             if (fileContent == null)
                 throw new Exception("File content not informed");
