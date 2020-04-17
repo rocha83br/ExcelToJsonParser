@@ -29,7 +29,6 @@ namespace Rochas.ExcelToJson
             var counter = 0;
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-
             using (var result = new StringWriter())
             {
                 var readerConfig = new ExcelReaderConfiguration()
@@ -86,7 +85,7 @@ namespace Rochas.ExcelToJson
             return JsonConvert.DeserializeObject<IEnumerable<object>>(strJson);
         }
 
-        public static string GetJsonClassModel(string fileName, int skipRows = 0, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
+        public static string GetClassModelFromTabular(string fileName, int skipRows = 0, string[] replaceFrom = null, string[] replaceTo = null, string[] headerColumns = null)
         {
             string result = null;
             var jsonContent = GetJsonStringFromTabular(fileName, skipRows, replaceFrom, replaceTo, headerColumns, true);
@@ -173,7 +172,7 @@ namespace Rochas.ExcelToJson
             }
         }
 
-        public static string GetJsonStringFromForm(Stream fileContent, string sheetName, string[] fieldNames, string[] replaceFrom = null, string[] replaceTo = null)
+        public static string GetJsonStringFromForm(Stream fileContent, string sheetName, string[] replaceFrom = null, string[] replaceTo = null, string[] fieldNames = null)
         {
             if (fileContent == null)
                 throw new Exception("File content not informed");
@@ -199,9 +198,33 @@ namespace Rochas.ExcelToJson
             return JsonConvert.DeserializeObject(strJson);
         }
 
+        public static string GetClassModelFromForm(string fileName, string sheetName, string[] replaceFrom = null, string[] replaceTo = null, string[] fieldNames = null)
+        {
+            string result = null;
+            var jsonContent = GetJsonStringFromForm(fileName, sheetName, replaceFrom, replaceTo, fieldNames);
+            if (!string.IsNullOrWhiteSpace(jsonContent))
+            {
+                var schema = NJsonSchema.JsonSchema.FromSampleJson(jsonContent);
+
+                var genOptions = new CSharpGeneratorSettings()
+                {
+                    GenerateDataAnnotations = false,
+                    GenerateDefaultValues = false,
+                    GenerateJsonMethods = true
+                };
+                var generator = new CSharpGenerator(schema, genOptions);
+
+                var className = fileName.Replace(".xlsx", string.Empty).Replace(".xls", string.Empty);
+
+                result = generator.GenerateFile(className);
+            }
+
+            return result;
+        }
+
         #region Dictionary results support
 
-        public static IDictionary<string, object> GetDictionary(string fileName, string sheetName, string[] fieldNames, string[] replaceFrom = null, string[] replaceTo = null)
+        public static IDictionary<string, object> GetDictionary(string fileName, string sheetName, string[] replaceFrom = null, string[] replaceTo = null, string[] fieldNames = null)
         {
             if (string.IsNullOrWhiteSpace(fileName))
                 throw new Exception("File name not informed");
@@ -212,7 +235,7 @@ namespace Rochas.ExcelToJson
             }
         }
 
-        public static IDictionary<string, object> GetDictionary(Stream fileContent, string sheetName, string[] fieldNames, string[] replaceFrom = null, string[] replaceTo = null)
+        public static IDictionary<string, object> GetDictionary(Stream fileContent, string sheetName, string[] replaceFrom = null, string[] replaceTo = null, string[] fieldNames = null)
         {
             if (fileContent == null)
                 throw new Exception("File content not informed");
@@ -318,8 +341,19 @@ namespace Rochas.ExcelToJson
             {
                 var cell = engine.Cell(field);
 
-                if (cell.Worksheet.Name.ToLower().Equals(sheetName.ToLower()))
-                    result.Add(field, cell.Value);
+                if (cell != null)
+                    if (cell.Worksheet.Name.ToLower().Equals(sheetName.ToLower()))
+                    {
+                        try
+                        {
+                            result.Add(field, cell.Value);
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex.GetType() == typeof(InvalidOperationException))
+                                throw new InvalidOperationException($"Invalid cell value at {field}.");
+                        }
+                    }
             }
 
             return result;
